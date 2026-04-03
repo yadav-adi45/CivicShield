@@ -1,0 +1,266 @@
+[
+  {
+    "state": "Andhra Pradesh",
+    "code": "AP",
+    "news_signals": [
+      {"headline": "Cyclone warning issued for coastal Andhra Pradesh", "category": "natural_disaster", "severity": 0.8, "source": "NDTV", "date": "2026-03-30"},
+      {"headline": "Rice supply chain disrupted in Krishna district", "category": "supply_disruption", "severity": 0.6, "source": "The Hindu", "date": "2026-03-29"}
+    ],
+    "baseline": {"lpg": 0.3, "fuel": 0.2, "food": 0.5, "water": 0.4, "medicine": 0.1}
+  },
+  {
+    "state": "Arunachal Pradesh",
+    "code": "AR",
+    "news_signals": [],
+    "baseline": {"lpg": 0.1, "fuel": 0.1, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Assam",
+    "code": "AS",
+    "news_signals": [
+      {"headline": "Flood waters rising in Brahmaputra basin areas", "category": "natural_disaster", "severity": 0.9, "source": "India Today", "date": "2026-03-31"},
+      {"headline": "Relief camps running low on food and medicine", "category": "supply_disruption", "severity": 0.85, "source": "NDTV", "date": "2026-03-31"},
+      {"headline": "Fuel shortage reported in flood-affected Assam districts", "category": "supply_disruption", "severity": 0.7, "source": "Times of India", "date": "2026-03-30"}
+    ],
+    "baseline": {"lpg": 0.6, "fuel": 0.7, "food": 0.8, "water": 0.9, "medicine": 0.7}
+  },
+  {
+    "state": "Bihar",
+    "code": "BR",
+    "news_signals": [
+      {"headline": "LPG cylinder delivery delayed across rural Bihar", "category": "supply_disruption", "severity": 0.6, "source": "Hindustan Times", "date": "2026-03-28"}
+    ],
+    "baseline": {"lpg": 0.5, "fuel": 0.3, "food": 0.3, "water": 0.2, "medicine": 0.2}
+  },
+  {
+    "state": "Chhattisgarh",
+    "code": "CT",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.1, "food": 0.2, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Goa",
+    "code": "GA",
+    "news_signals": [],
+    "baseline": {"lpg": 0.1, "fuel": 0.1, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Gujarat",
+    "code": "GJ",
+    "news_signals": [
+      {"headline": "Drought conditions worsening in Kutch region", "category": "natural_disaster", "severity": 0.7, "source": "Indian Express", "date": "2026-03-29"},
+      {"headline": "Water tanker demand surges in Ahmedabad outskirts", "category": "demand_spike", "severity": 0.65, "source": "Gujarat Samachar", "date": "2026-03-30"}
+    ],
+    "baseline": {"lpg": 0.3, "fuel": 0.2, "food": 0.3, "water": 0.7, "medicine": 0.1}
+  },
+  {
+    "state": "Haryana",
+    "code": "HR",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.2, "medicine": 0.1}
+  },
+  {
+    "state": "Himachal Pradesh",
+    "code": "HP",
+    "news_signals": [
+      {"headline": "Landslides block national highway in Shimla", "category": "natural_disaster", "severity": 0.75, "source": "NDTV", "date": "2026-03-31"}
+    ],
+    "baseline": {"lpg": 0.4, "fuel": 0.4, "food": 0.3, "water": 0.2, "medicine": 0.3}
+  },
+  {
+    "state": "Jharkhand",
+    "code": "JH",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.2, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Karnataka",
+    "code": "KA",
+    "news_signals": [
+      {"headline": "Bengaluru water crisis deepens as reservoirs hit low", "category": "demand_spike", "severity": 0.8, "source": "Deccan Herald", "date": "2026-03-31"}
+    ],
+    "baseline": {"lpg": 0.2, "fuel": 0.1, "food": 0.2, "water": 0.6, "medicine": 0.1}
+  },
+  {
+    "state": "Kerala",
+    "code": "KL",
+    "news_signals": [
+      {"headline": "Heavy rainfall predicted for Kerala coast", "category": "natural_disaster", "severity": 0.5, "source": "Manorama", "date": "2026-03-30"}
+    ],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.2, "water": 0.2, "medicine": 0.1}
+  },
+  {
+    "state": "Madhya Pradesh",
+    "code": "MP",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.1, "food": 0.2, "water": 0.2, "medicine": 0.1}
+  },
+  {
+    "state": "Maharashtra",
+    "code": "MH",
+    "news_signals": [
+      {"headline": "Marathwada drought: Farmers demand relief packages", "category": "natural_disaster", "severity": 0.7, "source": "Indian Express", "date": "2026-03-29"},
+      {"headline": "Food grain distribution stalled in Vidarbha", "category": "supply_disruption", "severity": 0.55, "source": "Loksatta", "date": "2026-03-28"}
+    ],
+    "baseline": {"lpg": 0.3, "fuel": 0.2, "food": 0.5, "water": 0.5, "medicine": 0.2}
+  },
+  {
+    "state": "Manipur",
+    "code": "MN",
+    "news_signals": [
+      {"headline": "Ethnic tensions disrupt supply routes in Manipur", "category": "conflict", "severity": 0.9, "source": "The Wire", "date": "2026-03-31"},
+      {"headline": "Essential commodity prices spike in Imphal valley", "category": "demand_spike", "severity": 0.85, "source": "NDTV", "date": "2026-03-30"},
+      {"headline": "Fuel stations shut down amid Manipur blockade", "category": "supply_disruption", "severity": 0.95, "source": "India Today", "date": "2026-03-31"}
+    ],
+    "baseline": {"lpg": 0.8, "fuel": 0.9, "food": 0.7, "water": 0.3, "medicine": 0.6}
+  },
+  {
+    "state": "Meghalaya",
+    "code": "ML",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Mizoram",
+    "code": "MZ",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Nagaland",
+    "code": "NL",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Odisha",
+    "code": "OR",
+    "news_signals": [
+      {"headline": "Cyclone preparedness drills underway in coastal Odisha", "category": "natural_disaster", "severity": 0.4, "source": "Sambad", "date": "2026-03-28"}
+    ],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.2, "water": 0.2, "medicine": 0.1}
+  },
+  {
+    "state": "Punjab",
+    "code": "PB",
+    "news_signals": [
+      {"headline": "LPG shortage reported across Punjab as supply chains disrupted", "category": "supply_disruption", "severity": 0.9, "source": "Tribune India", "date": "2026-03-31"},
+      {"headline": "Punjab farmers protest over diesel price hike", "category": "demand_spike", "severity": 0.7, "source": "Hindustan Times", "date": "2026-03-30"},
+      {"headline": "Gas cylinder black marketing surges in Ludhiana", "category": "supply_disruption", "severity": 0.8, "source": "NDTV", "date": "2026-03-29"}
+    ],
+    "baseline": {"lpg": 0.85, "fuel": 0.6, "food": 0.2, "water": 0.2, "medicine": 0.1}
+  },
+  {
+    "state": "Rajasthan",
+    "code": "RJ",
+    "news_signals": [
+      {"headline": "Heatwave alert issued for Western Rajasthan", "category": "natural_disaster", "severity": 0.7, "source": "Rajasthan Patrika", "date": "2026-03-31"},
+      {"headline": "Water scarcity hits Jaisalmer district hard", "category": "demand_spike", "severity": 0.75, "source": "Times of India", "date": "2026-03-30"}
+    ],
+    "baseline": {"lpg": 0.3, "fuel": 0.2, "food": 0.3, "water": 0.7, "medicine": 0.2}
+  },
+  {
+    "state": "Sikkim",
+    "code": "SK",
+    "news_signals": [],
+    "baseline": {"lpg": 0.1, "fuel": 0.1, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Tamil Nadu",
+    "code": "TN",
+    "news_signals": [
+      {"headline": "Chennai water board warns of impending shortage", "category": "demand_spike", "severity": 0.6, "source": "The Hindu", "date": "2026-03-29"}
+    ],
+    "baseline": {"lpg": 0.2, "fuel": 0.1, "food": 0.2, "water": 0.4, "medicine": 0.1}
+  },
+  {
+    "state": "Telangana",
+    "code": "TG",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.1, "food": 0.1, "water": 0.2, "medicine": 0.1}
+  },
+  {
+    "state": "Tripura",
+    "code": "TR",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Uttar Pradesh",
+    "code": "UP",
+    "news_signals": [
+      {"headline": "Heat-related deaths reported in eastern UP", "category": "natural_disaster", "severity": 0.65, "source": "Amar Ujala", "date": "2026-03-30"},
+      {"headline": "Medicine shortage hits PHCs in rural UP districts", "category": "supply_disruption", "severity": 0.6, "source": "NDTV", "date": "2026-03-28"}
+    ],
+    "baseline": {"lpg": 0.3, "fuel": 0.2, "food": 0.3, "water": 0.3, "medicine": 0.5}
+  },
+  {
+    "state": "Uttarakhand",
+    "code": "UT",
+    "news_signals": [
+      {"headline": "Cloudburst damages roads in Chamoli district", "category": "natural_disaster", "severity": 0.6, "source": "Dainik Jagran", "date": "2026-03-29"}
+    ],
+    "baseline": {"lpg": 0.3, "fuel": 0.3, "food": 0.2, "water": 0.2, "medicine": 0.2}
+  },
+  {
+    "state": "West Bengal",
+    "code": "WB",
+    "news_signals": [
+      {"headline": "Nor'wester season brings flooding fears to North Bengal", "category": "natural_disaster", "severity": 0.5, "source": "Anandabazar", "date": "2026-03-30"}
+    ],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.2, "water": 0.3, "medicine": 0.1}
+  },
+  {
+    "state": "Delhi",
+    "code": "DL",
+    "news_signals": [
+      {"headline": "Air quality index hits severe levels in Delhi NCR", "category": "natural_disaster", "severity": 0.5, "source": "Hindustan Times", "date": "2026-03-31"}
+    ],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.3, "medicine": 0.2}
+  },
+  {
+    "state": "Jammu and Kashmir",
+    "code": "JK",
+    "news_signals": [
+      {"headline": "Heavy snowfall disrupts supply routes in Kashmir valley", "category": "natural_disaster", "severity": 0.8, "source": "Greater Kashmir", "date": "2026-03-31"},
+      {"headline": "Essential supplies running low in remote J&K areas", "category": "supply_disruption", "severity": 0.75, "source": "NDTV", "date": "2026-03-30"}
+    ],
+    "baseline": {"lpg": 0.6, "fuel": 0.5, "food": 0.5, "water": 0.2, "medicine": 0.4}
+  },
+  {
+    "state": "Ladakh",
+    "code": "LA",
+    "news_signals": [],
+    "baseline": {"lpg": 0.3, "fuel": 0.3, "food": 0.2, "water": 0.2, "medicine": 0.2}
+  },
+  {
+    "state": "Chandigarh",
+    "code": "CH",
+    "news_signals": [],
+    "baseline": {"lpg": 0.1, "fuel": 0.1, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Puducherry",
+    "code": "PY",
+    "news_signals": [],
+    "baseline": {"lpg": 0.1, "fuel": 0.1, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Andaman and Nicobar Islands",
+    "code": "AN",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Dadra and Nagar Haveli and Daman and Diu",
+    "code": "DN",
+    "news_signals": [],
+    "baseline": {"lpg": 0.1, "fuel": 0.1, "food": 0.1, "water": 0.1, "medicine": 0.1}
+  },
+  {
+    "state": "Lakshadweep",
+    "code": "LD",
+    "news_signals": [],
+    "baseline": {"lpg": 0.2, "fuel": 0.2, "food": 0.2, "water": 0.1, "medicine": 0.1}
+  }
+]

@@ -1,0 +1,19 @@
+{
+  "name": "civicshield-backend",
+  "version": "1.0.0",
+  "description": "CivicShield Node.js API Gateway",
+  "main": "src/app.js",
+  "type": "module",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "node --watch src/app.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "cors": "^2.8.5",
+    "axios": "^1.7.0",
+    "express-rate-limit": "^7.4.0",
+    "dotenv": "^16.4.0",
+    "morgan": "^1.10.0"
+  }
+}

@@ -1,0 +1,117 @@
+.action-panel {
+  padding: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .action-panel {
+    padding: var(--space-md);
+  }
+  
+  .action-title {
+    font-size: 0.9rem;
+  }
+  
+  .action-item {
+    padding: var(--space-sm);
+  }
+  
+  .action-resource {
+    font-size: 0.8rem;
+  }
+  
+  .action-urgency {
+    font-size: 0.6rem;
+    padding: 2px 8px;
+  }
+  
+  .action-recommendation {
+    font-size: 0.75rem;
+  }
+}
+
+.action-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.action-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.action-item {
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+}
+
+.action-item:hover {
+  border-color: var(--border-accent);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.action-item-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-sm);
+}
+
+.action-resource {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.action-urgency {
+  padding: 2px 10px;
+  border-radius: 10px;
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.action-urgency.critical {
+  background: rgba(255, 59, 92, 0.12);
+  color: var(--risk-high);
+  border: 1px solid rgba(255, 59, 92, 0.25);
+}
+
+.action-urgency.warning {
+  background: rgba(255, 184, 0, 0.12);
+  color: var(--risk-medium);
+  border: 1px solid rgba(255, 184, 0, 0.25);
+}
+
+.action-urgency.normal {
+  background: rgba(0, 230, 118, 0.12);
+  color: var(--risk-low);
+  border: 1px solid rgba(0, 230, 118, 0.25);
+}
+
+.action-recommendation {
+  font-size: 0.8rem;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.no-actions {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+.no-actions-icon {
+  font-size: 2rem;
+  margin-bottom: var(--space-sm);
+}

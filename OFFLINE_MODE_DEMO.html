@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Offline Mode Demo - CivicShield</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #0d1332 0%, #1a1f3a 100%);
+      color: #fff;
+      padding: 40px 20px;
+    }
+    
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      text-align: center;
+    }
+    
+    .status {
+      text-align: center;
+      padding: 20px;
+      border-radius: 12px;
+      margin: 30px 0;
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+    
+    .status.online {
+      background: rgba(74, 222, 128, 0.2);
+      border: 2px solid #4ade80;
+      color: #4ade80;
+    }
+    
+    .status.offline {
+      background: rgba(239, 68, 68, 0.2);
+      border: 2px solid #ef4444;
+      color: #ef4444;
+    }
+    
+    .demo-section {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 30px;
+      margin: 20px 0;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: #4facfe;
+    }
+    
+    .test-buttons {
+      display: grid;
+      gap: 15px;
+      margin: 20px 0;
+    }
+    
+    button {
+      background: linear-gradient(135deg, #4facfe, #667eea);
+      border: none;
+      color: white;
+      padding: 15px 30px;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.2s;
+    }
+    
+    button:hover {
+      transform: translateY(-2px);
+    }
+    
+    button:active {
+      transform: translateY(0);
+    }
+    
+    .response-box {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      padding: 20px;
+      margin-top: 20px;
+      min-height: 100px;
+      font-family: 'Courier New', monospace;
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+    
+    .instructions {
+      background: rgba(79, 172, 254, 0.1);
+      border-left: 4px solid #4facfe;
+      padding: 20px;
+      margin: 20px 0;
+      border-radius: 4px;
+    }
+    
+    .instructions h3 {
+      margin-bottom: 10px;
+      color: #4facfe;
+    }
+    
+    .instructions ol {
+      margin-left: 20px;
+    }
+    
+    .instructions li {
+      margin: 8px 0;
+    }
+    
+    code {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'Courier New', monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🛡️ CivicShield Offline Mode Demo</h1>
+    
+    <div id="status" class="status online">
+      🟢 Online - Connected to Internet
+    </div>
+    
+    <div class="instructions">
+      <h3>📋 How to Test Offline Mode:</h3>
+      <ol>
+        <li>Open Chrome DevTools (Press <code>F12</code>)</li>
+        <li>Go to <code>Network</code> tab</li>
+        <li>Check the <code>Offline</code> checkbox</li>
+        <li>Watch the status change above</li>
+        <li>Test the chatbot responses below</li>
+        <li>Uncheck <code>Offline</code> to go back online</li>
+      </ol>
+    </div>
+    
+    <div class="demo-section">
+      <h2>💬 Offline Chatbot Test</h2>
+      <p style="margin-bottom: 20px; color: rgba(255,255,255,0.7);">
+        Click the buttons below to test offline responses:
+      </p>
+      
+      <div class="test-buttons">
+        <button onclick="testQuery('water shortage help')">Test: Water Shortage</button>
+        <button onclick="testQuery('lpg gas shortage')">Test: LPG Shortage</button>
+        <button onclick="testQuery('emergency help')">Test: Emergency Contacts</button>
+        <button onclick="testQuery('how to prepare')">Test: Preparation Guide</button>
+        <button onclick="testQuery('fuel shortage')">Test: Fuel Shortage</button>
+      </div>
+      
+      <div id="response" class="response-box">
+        Click a button above to see the offline response...
+      </div>
+    </div>
+    
+    <div class="demo-section">
+      <h2>✅ Features Implemented</h2>
+      <ul style="line-height: 2; margin-left: 20px;">
+        <li>✓ Real-time online/offline detection</li>
+        <li>✓ Visual offline banner in main app</li>
+        <li>✓ Offline badge in chatbot header</li>
+        <li>✓ Rule-based chatbot responses (10 categories)</li>
+        <li>✓ Emergency contacts always accessible</li>
+        <li>✓ Crisis survival guides</li>
+        <li>✓ Service worker for asset caching</li>
+        <li>✓ Graceful degradation</li>
+      </ul>
+    </div>
+  </div>
+  
+  <script>
+    // Offline response rules (same as in offlineData.js)
+    function getOfflineResponse(message) {
+      const msg = message.toLowerCase();
+      
+      if (msg.includes('water')) {
+        return "For water shortages: Store 3L per person daily, boil uncertain water for 1 min, collect rainwater, reduce usage. Emergency: Call 1916.";
+      }
+      
+      if (msg.includes('lpg') || msg.includes('gas') || msg.includes('cooking')) {
+        return "For LPG shortage: Stock alternative fuels, use pressure cooker, keep cylinder 50% full, register with multiple distributors. Emergency: Call 1906.";
+      }
+      
+      if (msg.includes('petrol') || msg.includes('fuel') || msg.includes('diesel')) {
+        return "For fuel shortage: Keep tank 75% full, reduce travel, use public transport, maintain vehicle efficiency. Emergency: Call 1800-233-3555.";
+      }
+      
+      if (msg.includes('emergency') || msg.includes('help')) {
+        return "Emergency contacts: 112 (All), 100 (Police), 101 (Fire), 102 (Ambulance), 108 (Disaster). Stay calm and provide clear information when calling.";
+      }
+      
+      if (msg.includes('prepare') || msg.includes('preparation')) {
+        return "Emergency kit: water, food, medicines, flashlight, radio, cash, documents. Know evacuation routes, maintain emergency contacts, stay informed.";
+      }
+      
+      return "I'm in offline mode with limited responses. For emergencies, call 112. I can help with: water, LPG, fuel, electricity, food shortages, safety, and emergency contacts.";
+    }
+    
+    // Update status based on online/offline
+    function updateStatus() {
+      const statusEl = document.getElementById('status');
+      if (navigator.onLine) {
+        statusEl.className = 'status online';
+        statusEl.innerHTML = '🟢 Online - Connected to Internet';
+      } else {
+        statusEl.className = 'status offline';
+        statusEl.innerHTML = '🔴 Offline - No Internet Connection';
+      }
+    }
+    
+    // Test query function
+    function testQuery(query) {
+      const responseEl = document.getElementById('response');
+      responseEl.innerHTML = `<strong>Query:</strong> "${query}"<br><br>`;
+      
+      if (navigator.onLine) {
+        responseEl.innerHTML += '<em style="color: #4ade80;">Note: You are currently ONLINE. Go offline to see rule-based responses.</em><br><br>';
+      }
+      
+      const response = getOfflineResponse(query);
+      responseEl.innerHTML += `<strong>Response:</strong><br>${response}`;
+      
+      if (!navigator.onLine) {
+        responseEl.innerHTML += '<br><br><em style="color: #ef4444;">⚠️ Offline mode: Response is pre-programmed. Reconnect for AI-powered answers.</em>';
+      }
+    }
+    
+    // Listen for online/offline events
+    window.addEventListener('online', updateStatus);
+    window.addEventListener('offline', updateStatus);
+    
+    // Initial status
+    updateStatus();
+  </script>
+</body>
+</html>

@@ -1,0 +1,143 @@
+.alerts-panel {
+  padding: var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .alerts-panel {
+    padding: var(--space-md);
+  }
+  
+  .alerts-title {
+    font-size: 0.9rem;
+  }
+  
+  .alerts-count {
+    font-size: 0.65rem;
+    padding: 2px 8px;
+  }
+  
+  .alert-item {
+    padding: var(--space-sm);
+    gap: var(--space-sm);
+  }
+  
+  .alert-state {
+    font-size: 0.7rem;
+  }
+  
+  .alert-message {
+    font-size: 0.68rem;
+  }
+  
+  .alert-meta {
+    font-size: 0.58rem;
+    gap: var(--space-sm);
+  }
+}
+
+.alerts-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-md);
+}
+
+.alerts-title {
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+}
+
+.alerts-count {
+  background: rgba(255, 59, 92, 0.15);
+  color: var(--risk-high);
+  padding: 2px 10px;
+  border-radius: 12px;
+  font-size: 0.7rem;
+  font-weight: 600;
+}
+
+.alerts-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  max-height: 350px;
+  overflow-y: auto;
+}
+
+.alert-item {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-md);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-subtle);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+}
+
+.alert-item:hover {
+  border-color: var(--border-accent);
+  background: rgba(255, 255, 255, 0.04);
+  transform: translateX(4px);
+}
+
+.alert-severity-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-top: 6px;
+  flex-shrink: 0;
+}
+
+.alert-severity-dot.high {
+  background: var(--risk-high);
+  box-shadow: 0 0 6px var(--risk-high-glow);
+}
+
+.alert-severity-dot.medium {
+  background: var(--risk-medium);
+  box-shadow: 0 0 6px var(--risk-medium-glow);
+}
+
+.alert-severity-dot.low {
+  background: var(--risk-low);
+  box-shadow: 0 0 6px var(--risk-low-glow);
+}
+
+.alert-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.alert-state {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.alert-message {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.alert-meta {
+  display: flex;
+  gap: var(--space-md);
+  font-size: 0.62rem;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+
+.no-alerts {
+  text-align: center;
+  padding: var(--space-xl);
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}

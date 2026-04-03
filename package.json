@@ -1,0 +1,32 @@
+{
+  "name": "civicshield",
+  "version": "1.0.0",
+  "description": "CivicShield - Civilian Crisis Intelligence System",
+  "main": "index.js",
+  "scripts": {
+    "start:ml": "cd ml-service && source venv/bin/activate && python -m uvicorn app.main:app --host 0.0.0.0 --port 8000 --reload",
+    "start:backend": "cd backend && npm start",
+    "start:frontend": "cd frontend && npm run dev",
+    "start": "concurrently --kill-others --names \"ML,BACKEND,FRONTEND\" --prefix-colors \"cyan,green,yellow\" \"npm run start:ml\" \"npm run start:backend\" \"npm run start:frontend\"",
+    "install:all": "npm install && cd backend && npm install && cd ../frontend && npm install && cd ../ml-service && pip install -r requirements.txt",
+    "test:system": "bash test-system.sh"
+  },
+  "keywords": [
+    "crisis",
+    "intelligence",
+    "prediction",
+    "ml",
+    "fastapi",
+    "react",
+    "nodejs"
+  ],
+  "author": "CivicShield Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=16.0.0",
+    "npm": ">=8.0.0"
+  }
+}

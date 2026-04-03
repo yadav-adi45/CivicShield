@@ -1,0 +1,391 @@
+/* ============================================
+   CIVICSHIELD DESIGN SYSTEM v2.1
+   Premium Dark Theme with Subtle Purple Gradients
+   Dual Theme Support (Dark/Light)
+   ============================================ */
+
+:root {
+  /* Shared Values */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+  
+  /* Spacing Scale */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  
+  /* Transitions */
+  --transition-fast: 0.15s ease;
+  --transition-base: 0.2s ease;
+  --transition-slow: 0.3s ease;
+  
+  /* Z-Index Scale */
+  --z-base: 1;
+  --z-dropdown: 100;
+  --z-sticky: 200;
+  --z-modal: 1000;
+  --z-toast: 2000;
+}
+
+/* ============================================
+   DARK THEME (DEFAULT)
+   ============================================ */
+
+[data-theme="dark"] {
+  /* Background System */
+  --bg-primary: #0B0B12;
+  --bg-secondary: #11121A;
+  --card-bg: #151622;
+  --card-bg-hover: #1A1B28;
+  
+  /* Border System */
+  --border: #232533;
+  --border-subtle: #1C1D2A;
+  --border-emphasis: #2D2F3F;
+  --border-accent: #3D3F52;
+  
+  /* Text System */
+  --text-primary: #F5F7FF;
+  --text-secondary: #A5A7C0;
+  --text-muted: #6B6D85;
+  --text-disabled: #4A4C5E;
+  
+  /* Accent System - Subtle Purple */
+  --accent-primary: #8B5CF6;
+  --accent-secondary: #A78BFA;
+  --accent-gradient: linear-gradient(135deg, #6D28D9 0%, #8B5CF6 50%, #A78BFA 100%);
+  
+  /* Semantic Colors */
+  --accent-green: #22C55E;
+  --accent-yellow: #F59E0B;
+  --accent-red: #EF4444;
+  --accent-blue: #3B82F6;
+  
+  /* Status Colors */
+  --status-online: #22C55E;
+  --status-offline: #EF4444;
+  
+  /* Risk Colors */
+  --risk-low: #22C55E;
+  --risk-medium: #F59E0B;
+  --risk-high: #EF4444;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.35);
+  --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.35);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+/* ============================================
+   LIGHT THEME
+   ============================================ */
+
+[data-theme="light"] {
+  /* Background System */
+  --bg-primary: #F6F7FB;
+  --bg-secondary: #FFFFFF;
+  --card-bg: #FFFFFF;
+  --card-bg-hover: #F9FAFB;
+  
+  /* Border System */
+  --border: #E5E7EB;
+  --border-subtle: #F3F4F6;
+  --border-emphasis: #D1D5DB;
+  --border-accent: #9CA3AF;
+  
+  /* Text System */
+  --text-primary: #111827;
+  --text-secondary: #6B7280;
+  --text-muted: #9CA3AF;
+  --text-disabled: #D1D5DB;
+  
+  /* Accent System - Subtle Purple */
+  --accent-primary: #7C3AED;
+  --accent-secondary: #8B5CF6;
+  --accent-gradient: linear-gradient(135deg, #7C3AED 0%, #A78BFA 100%);
+  
+  /* Semantic Colors */
+  --accent-green: #16A34A;
+  --accent-yellow: #D97706;
+  --accent-red: #DC2626;
+  --accent-blue: #2563EB;
+  
+  /* Status Colors */
+  --status-online: #16A34A;
+  --status-offline: #DC2626;
+  
+  /* Risk Colors */
+  --risk-low: #16A34A;
+  --risk-medium: #D97706;
+  --risk-high: #DC2626;
+  
+  /* Shadows */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+}
+
+/* ============================================
+   GLOBAL RESETS & BASE STYLES
+   ============================================ */
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  line-height: 1.5;
+  min-height: 100vh;
+  transition: background-color var(--transition-base), color var(--transition-base);
+  position: relative;
+}
+
+/* Subtle purple gradient glow for glass visibility */
+body::before {
+  content: "";
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle at 30% 20%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(109, 40, 217, 0.06) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+[data-theme="light"] body::before {
+  background: radial-gradient(circle at 30% 20%, rgba(124, 58, 237, 0.04) 0%, transparent 50%),
+              radial-gradient(circle at 70% 80%, rgba(109, 40, 217, 0.03) 0%, transparent 50%);
+}
+
+#root {
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* ============================================
+   GLASSMORPHISM SYSTEM - Premium Frosted Glass
+   ============================================ */
+
+/* Primary glass effect for major components */
+.glass-card {
+  background: rgba(20, 20, 30, 0.55);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.45);
+  transition: all var(--transition-base);
+  position: relative;
+  overflow: hidden;
+}
+
+[data-theme="light"] .glass-card {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+}
+
+/* Subtle gradient highlight */
+.glass-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--accent-gradient);
+  opacity: 0.04;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.glass-card > * {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-card:hover {
+  border-color: rgba(255, 255, 255, 0.1);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.5);
+}
+
+[data-theme="light"] .glass-card:hover {
+  border-color: rgba(0, 0, 0, 0.12);
+  box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+}
+
+/* Lighter glass for nested elements */
+.glass-light {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: var(--radius-md);
+}
+
+[data-theme="light"] .glass-light {
+  background: rgba(255, 255, 255, 0.5);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================
+   BUTTON SYSTEM
+   ============================================ */
+
+.primary-btn {
+  background: var(--accent-gradient);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: opacity var(--transition-base);
+}
+
+.primary-btn:hover {
+  opacity: 0.9;
+}
+
+.primary-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.secondary-btn {
+  background: var(--bg-secondary);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-base);
+}
+
+.secondary-btn:hover {
+  background: var(--card-bg-hover);
+  border-color: var(--border-emphasis);
+}
+
+/* ============================================
+   SCROLLBAR STYLING
+   ============================================ */
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border);
+  border-radius: var(--radius-sm);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-emphasis);
+}
+
+/* ============================================
+   ANIMATIONS - Subtle Only
+   ============================================ */
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideDown {
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Subtle pulse for online status */
+@keyframes statusPulse {
+  0%, 100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
+/* ============================================
+   UTILITY CLASSES
+   ============================================ */
+
+.skeleton {
+  background: var(--card-bg);
+  animation: pulse 2s infinite;
+  border-radius: var(--radius-sm);
+}
+
+/* Status indicator */
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+}
+
+.status-dot.online {
+  background: var(--status-online);
+  animation: statusPulse 2s infinite;
+}
+
+.status-dot.offline {
+  background: var(--status-offline);
+}
