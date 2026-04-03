@@ -29,22 +29,46 @@ export default function StateMap({ stateCode, riskScore = 0, stateName }) {
 
     const url = getStateMapUrl(stateCode);
     if (!url) {
-      setError(`No map data for state: ${stateCode}`);
+      const errorMsg = `No map configuration found for state code: ${stateCode}`;
+      console.error(`[StateMap] ${errorMsg}`);
+      setError(errorMsg);
       setLoading(false);
       return;
     }
 
+    console.log(`[StateMap] Fetching map data for ${stateCode} from: ${url}`);
+
     fetch(url)
       .then((r) => {
-        if (!r.ok) throw new Error(`Failed to load map: ${r.status}`);
+        console.log(`[StateMap] Response status for ${stateCode}: ${r.status}`);
+        if (!r.ok) {
+          throw new Error(`HTTP ${r.status}: Failed to load map file at ${url}`);
+        }
         return r.json();
       })
       .then((data) => {
+        console.log(`[StateMap] Successfully loaded ${stateCode} map:`, {
+          name: data.name,
+          code: data.code,
+          districtCount: data.districtCount,
+          actualDistricts: Object.keys(data.districts || {}).length
+        });
+        
+        // Validate data structure
+        if (!data.name || !data.code || !data.districts || !data.viewBox) {
+          throw new Error('Invalid map data structure: missing required fields');
+        }
+        
+        if (Object.keys(data.districts).length === 0) {
+          throw new Error('Map data contains no districts');
+        }
+        
         setMapData(data);
         setLoading(false);
       })
       .catch((err) => {
-        console.error(`Failed to load state map for ${stateCode}:`, err);
+        console.error(`[StateMap] Failed to load state map for ${stateCode}:`, err);
+        console.error(`[StateMap] Attempted URL: ${url}`);
         setError(err.message);
         setLoading(false);
       });
@@ -105,7 +129,15 @@ export default function StateMap({ stateCode, riskScore = 0, stateName }) {
   if (error || !mapData) {
     return (
       <div className="state-map-error">
-        <span>Could not load state map</span>
+        <div className="error-icon">⚠️</div>
+        <div className="error-title">Map Data Unavailable</div>
+        <div className="error-message">
+          {error || 'Could not load state map'}
+        </div>
+        <div className="error-details">
+          <div>State Code: {stateCode}</div>
+          <div>State Name: {stateName || 'Unknown'}</div>
+        </div>
       </div>
     );
   }

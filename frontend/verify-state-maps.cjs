@@ -1,20 +1,14 @@
-/** Auto-generated state map registry — real district boundaries */
+#!/usr/bin/env node
 
 /**
- * Generate a standardized slug from a state name
- * @param {string} name - State name
- * @returns {string} Slug for file path
+ * Verify State Map Integration
+ * Tests that all state district map files exist and are valid
  */
-export function getStateSlug(name) {
-  return name
-    .toLowerCase()
-    .replace(/&/g, 'and')
-    .replace(/[^a-z0-9]+/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '');
-}
 
-export const STATE_MAP_REGISTRY = {
+const fs = require('fs');
+const path = require('path');
+
+const STATE_MAP_REGISTRY = {
   'AP': { name: 'Andhra Pradesh', slug: 'andhra-pradesh', districtCount: 13 },
   'AR': { name: 'Arunachal Pradesh', slug: 'arunachal-pradesh', districtCount: 25 },
   'AS': { name: 'Assam', slug: 'assam', districtCount: 33 },
@@ -53,17 +47,71 @@ export const STATE_MAP_REGISTRY = {
   'AN': { name: 'Andaman and Nicobar Islands', slug: 'andaman-and-nicobar-islands', districtCount: 3 },
 };
 
-export function getStateMapUrl(code) {
-  const entry = STATE_MAP_REGISTRY[code];
-  if (!entry) {
-    console.error(`[StateMapRegistry] No entry found for state code: ${code}`);
-    return null;
-  }
-  const url = `/maps/states/${entry.slug}.json`;
-  console.log(`[StateMapRegistry] Loading map for ${entry.name} (${code}): ${url}`);
-  return url;
-}
+const MAPS_DIR = path.join(__dirname, 'public', 'maps', 'states');
 
-export function getStateName(code) {
-  return STATE_MAP_REGISTRY[code]?.name || code;
+console.log('🗺️  Verifying State Map Integration\n');
+console.log('═'.repeat(60));
+
+let totalStates = 0;
+let successCount = 0;
+let errorCount = 0;
+const errors = [];
+
+Object.entries(STATE_MAP_REGISTRY).forEach(([code, info]) => {
+  totalStates++;
+  const filePath = path.join(MAPS_DIR, `${info.slug}.json`);
+  
+  try {
+    // Check if file exists
+    if (!fs.existsSync(filePath)) {
+      throw new Error('File not found');
+    }
+    
+    // Read and parse JSON
+    const content = fs.readFileSync(filePath, 'utf8');
+    const data = JSON.parse(content);
+    
+    // Validate structure
+    if (!data.name || !data.code || !data.districts || !data.viewBox) {
+      throw new Error('Invalid structure: missing required fields');
+    }
+    
+    // Validate district count
+    const actualCount = Object.keys(data.districts).length;
+    if (actualCount !== info.districtCount) {
+      throw new Error(`District count mismatch: expected ${info.districtCount}, got ${actualCount}`);
+    }
+    
+    // Validate code matches
+    if (data.code !== code) {
+      throw new Error(`Code mismatch: expected ${code}, got ${data.code}`);
+    }
+    
+    console.log(`✓ ${code.padEnd(3)} ${info.name.padEnd(40)} ${actualCount} districts`);
+    successCount++;
+    
+  } catch (error) {
+    console.log(`✗ ${code.padEnd(3)} ${info.name.padEnd(40)} ERROR: ${error.message}`);
+    errorCount++;
+    errors.push({ code, name: info.name, error: error.message, filePath });
+  }
+});
+
+console.log('═'.repeat(60));
+console.log(`\n📊 Summary:`);
+console.log(`   Total States:  ${totalStates}`);
+console.log(`   ✓ Success:     ${successCount} (${((successCount/totalStates)*100).toFixed(1)}%)`);
+console.log(`   ✗ Errors:      ${errorCount} (${((errorCount/totalStates)*100).toFixed(1)}%)`);
+
+if (errors.length > 0) {
+  console.log(`\n❌ Errors Found:\n`);
+  errors.forEach(({ code, name, error, filePath }) => {
+    console.log(`   ${code} - ${name}`);
+    console.log(`      Error: ${error}`);
+    console.log(`      Path:  ${filePath}\n`);
+  });
+  process.exit(1);
+} else {
+  console.log(`\n✅ All state maps verified successfully!`);
+  process.exit(0);
 }

@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>State Map Integration Test</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            padding: 20px;
+            background: #0B0B12;
+            color: #F5F7FF;
+        }
+        .test-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        h1 {
+            color: #8B5CF6;
+        }
+        .state-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .state-item {
+            padding: 15px;
+            background: rgba(20, 20, 30, 0.55);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .state-item:hover {
+            border-color: rgba(139, 92, 246, 0.5);
+            transform: translateY(-2px);
+        }
+        .state-item.success {
+            border-color: #22C55E;
+            background: rgba(34, 197, 94, 0.1);
+        }
+        .state-item.error {
+            border-color: #EF4444;
+            background: rgba(239, 68, 68, 0.1);
+        }
+        .state-item.loading {
+            border-color: #F59E0B;
+            background: rgba(245, 158, 11, 0.1);
+        }
+        .state-code {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: #8B5CF6;
+        }
+        .state-name {
+            font-size: 0.85rem;
+            margin-top: 5px;
+            opacity: 0.8;
+        }
+        .district-count {
+            font-size: 0.75rem;
+            margin-top: 5px;
+            opacity: 0.6;
+        }
+        .status {
+            font-size: 0.7rem;
+            margin-top: 5px;
+            font-weight: 600;
+        }
+        .controls {
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #6D28D9, #8B5CF6);
+            border: none;
+            border-radius: 8px;
+            color: white;
+            font-weight: 600;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .summary {
+            padding: 20px;
+            background: rgba(20, 20, 30, 0.55);
+            backdrop-filter: blur(18px);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+        .summary-item {
+            display: inline-block;
+            margin-right: 20px;
+            font-size: 0.9rem;
+        }
+        .summary-value {
+            font-weight: 700;
+            font-size: 1.2rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🗺️ State Map Integration Test</h1>
+        
+        <div class="summary" id="summary">
+            <div class="summary-item">
+                <div class="summary-value" id="total">0</div>
+                <div>Total States</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" style="color: #22C55E" id="success">0</div>
+                <div>Success</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" style="color: #EF4444" id="error">0</div>
+                <div>Errors</div>
+            </div>
+            <div class="summary-item">
+                <div class="summary-value" style="color: #F59E0B" id="pending">36</div>
+                <div>Pending</div>
+            </div>
+        </div>
+
+        <div class="controls">
+            <button onclick="testAllStates()">Test All States</button>
+            <button onclick="resetTests()">Reset</button>
+        </div>
+
+        <div class="state-grid" id="stateGrid"></div>
+    </div>
+
+    <script>
+        const STATE_MAP_REGISTRY = {
+            'AP': { name: 'Andhra Pradesh', slug: 'andhra-pradesh', districtCount: 13 },
+            'AR': { name: 'Arunachal Pradesh', slug: 'arunachal-pradesh', districtCount: 25 },
+            'AS': { name: 'Assam', slug: 'assam', districtCount: 33 },
+            'BR': { name: 'Bihar', slug: 'bihar', districtCount: 38 },
+            'CH': { name: 'Chandigarh', slug: 'chandigarh', districtCount: 1 },
+            'CT': { name: 'Chhattisgarh', slug: 'chhattisgarh', districtCount: 27 },
+            'DN': { name: 'Dadra and Nagar Haveli and Daman and Diu', slug: 'dadra-and-nagar-haveli-and-daman-and-diu', districtCount: 3 },
+            'DL': { name: 'Delhi', slug: 'delhi', districtCount: 1 },
+            'GA': { name: 'Goa', slug: 'goa', districtCount: 2 },
+            'GJ': { name: 'Gujarat', slug: 'gujarat', districtCount: 33 },
+            'HR': { name: 'Haryana', slug: 'haryana', districtCount: 22 },
+            'HP': { name: 'Himachal Pradesh', slug: 'himachal-pradesh', districtCount: 12 },
+            'JK': { name: 'Jammu and Kashmir', slug: 'jammu-and-kashmir', districtCount: 22 },
+            'JH': { name: 'Jharkhand', slug: 'jharkhand', districtCount: 24 },
+            'KA': { name: 'Karnataka', slug: 'karnataka', districtCount: 30 },
+            'KL': { name: 'Kerala', slug: 'kerala', districtCount: 14 },
+            'LA': { name: 'Ladakh', slug: 'ladakh', districtCount: 2 },
+            'LD': { name: 'Lakshadweep', slug: 'lakshadweep', districtCount: 1 },
+            'MP': { name: 'Madhya Pradesh', slug: 'madhya-pradesh', districtCount: 52 },
+            'MH': { name: 'Maharashtra', slug: 'maharashtra', districtCount: 35 },
+            'MN': { name: 'Manipur', slug: 'manipur', districtCount: 16 },
+            'ML': { name: 'Meghalaya', slug: 'meghalaya', districtCount: 11 },
+            'MZ': { name: 'Mizoram', slug: 'mizoram', districtCount: 10 },
+            'NL': { name: 'Nagaland', slug: 'nagaland', districtCount: 11 },
+            'OR': { name: 'Odisha', slug: 'odisha', districtCount: 30 },
+            'PY': { name: 'Puducherry', slug: 'puducherry', districtCount: 4 },
+            'PB': { name: 'Punjab', slug: 'punjab', districtCount: 22 },
+            'RJ': { name: 'Rajasthan', slug: 'rajasthan', districtCount: 33 },
+            'SK': { name: 'Sikkim', slug: 'sikkim', districtCount: 4 },
+            'TN': { name: 'Tamil Nadu', slug: 'tamil-nadu', districtCount: 37 },
+            'TG': { name: 'Telangana', slug: 'telangana', districtCount: 33 },
+            'TR': { name: 'Tripura', slug: 'tripura', districtCount: 8 },
+            'UP': { name: 'Uttar Pradesh', slug: 'uttar-pradesh', districtCount: 75 },
+            'UT': { name: 'Uttarakhand', slug: 'uttarakhand', districtCount: 13 },
+            'WB': { name: 'West Bengal', slug: 'west-bengal', districtCount: 23 },
+        };
+
+        let testResults = {};
+
+        function initializeGrid() {
+            const grid = document.getElementById('stateGrid');
+            grid.innerHTML = '';
+            
+            Object.entries(STATE_MAP_REGISTRY).forEach(([code, info]) => {
+                const item = document.createElement('div');
+                item.className = 'state-item';
+                item.id = `state-${code}`;
+                item.innerHTML = `
+                    <div class="state-code">${code}</div>
+                    <div class="state-name">${info.name}</div>
+                    <div class="district-count">${info.districtCount} districts</div>
+                    <div class="status" id="status-${code}">Not tested</div>
+                `;
+                item.onclick = () => testState(code);
+                grid.appendChild(item);
+            });
+
+            document.getElementById('total').textContent = Object.keys(STATE_MAP_REGISTRY).length;
+        }
+
+        async function testState(code) {
+            const item = document.getElementById(`state-${code}`);
+            const status = document.getElementById(`status-${code}`);
+            
+            item.className = 'state-item loading';
+            status.textContent = 'Testing...';
+
+            const info = STATE_MAP_REGISTRY[code];
+            const url = `/maps/states/${info.slug}.json`;
+
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                // Validate structure
+                if (!data.name || !data.code || !data.districts || !data.viewBox) {
+                    throw new Error('Invalid JSON structure');
+                }
+
+                const districtCount = Object.keys(data.districts).length;
+                if (districtCount !== info.districtCount) {
+                    throw new Error(`Expected ${info.districtCount} districts, got ${districtCount}`);
+                }
+
+                item.className = 'state-item success';
+                status.textContent = `✓ ${districtCount} districts loaded`;
+                testResults[code] = { success: true, districtCount };
+                
+            } catch (error) {
+                item.className = 'state-item error';
+                status.textContent = `✗ ${error.message}`;
+                testResults[code] = { success: false, error: error.message };
+            }
+
+            updateSummary();
+        }
+
+        async function testAllStates() {
+            testResults = {};
+            const codes = Object.keys(STATE_MAP_REGISTRY);
+            
+            for (const code of codes) {
+                await testState(code);
+                await new Promise(resolve => setTimeout(resolve, 100)); // Small delay
+            }
+        }
+
+        function resetTests() {
+            testResults = {};
+            initializeGrid();
+            updateSummary();
+        }
+
+        function updateSummary() {
+            const total = Object.keys(STATE_MAP_REGISTRY).length;
+            const tested = Object.keys(testResults).length;
+            const success = Object.values(testResults).filter(r => r.success).length;
+            const error = Object.values(testResults).filter(r => !r.success).length;
+            const pending = total - tested;
+
+            document.getElementById('success').textContent = success;
+            document.getElementById('error').textContent = error;
+            document.getElementById('pending').textContent = pending;
+        }
+
+        // Initialize on load
+        initializeGrid();
+    </script>
+</body>
+</html>

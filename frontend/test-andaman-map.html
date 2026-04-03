@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Andaman and Nicobar Islands Map</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      padding: 2rem;
+      background: #0B0B12;
+      color: #E5E7EB;
+    }
+    .container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    h1 {
+      color: #8B5CF6;
+      margin-bottom: 1rem;
+    }
+    .status {
+      padding: 1rem;
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      background: rgba(20, 20, 30, 0.55);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .success {
+      border-left: 4px solid #10B981;
+    }
+    .error {
+      border-left: 4px solid #EF4444;
+    }
+    svg {
+      width: 100%;
+      max-width: 600px;
+      height: auto;
+      background: rgba(20, 20, 30, 0.55);
+      border-radius: 12px;
+      padding: 1rem;
+    }
+    path {
+      fill: #8B5CF6;
+      stroke: rgba(255, 255, 255, 0.12);
+      stroke-width: 0.5;
+      transition: fill 200ms ease;
+    }
+    path:hover {
+      fill: #A78BFA;
+      stroke-width: 1.5;
+    }
+    .district-name {
+      font-size: 0.875rem;
+      color: #9CA3AF;
+      margin-top: 0.5rem;
+    }
+    pre {
+      background: rgba(0, 0, 0, 0.3);
+      padding: 1rem;
+      border-radius: 8px;
+      overflow-x: auto;
+      font-size: 0.875rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🗺️ Andaman and Nicobar Islands Map Test</h1>
+    
+    <div id="status" class="status">
+      <strong>Loading map data...</strong>
+    </div>
+
+    <div id="map-container"></div>
+
+    <div id="data-info"></div>
+  </div>
+
+  <script>
+    async function testMap() {
+      const statusEl = document.getElementById('status');
+      const mapContainer = document.getElementById('map-container');
+      const dataInfo = document.getElementById('data-info');
+
+      try {
+        // Fetch the map data
+        const response = await fetch('/maps/states/andaman-and-nicobar-islands.json');
+        
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: Failed to load map file`);
+        }
+
+        const data = await response.json();
+
+        // Validate structure
+        const requiredFields = ['name', 'code', 'viewBox', 'districtCount', 'districts'];
+        const missingFields = requiredFields.filter(field => !data[field]);
+        
+        if (missingFields.length > 0) {
+          throw new Error(`Missing required fields: ${missingFields.join(', ')}`);
+        }
+
+        const districtCount = Object.keys(data.districts).length;
+        
+        if (districtCount !== data.districtCount) {
+          throw new Error(`District count mismatch: expected ${data.districtCount}, got ${districtCount}`);
+        }
+
+        // Success!
+        statusEl.className = 'status success';
+        statusEl.innerHTML = `
+          <strong>✅ Map loaded successfully!</strong><br>
+          <div class="district-name">
+            State: ${data.name} (${data.code})<br>
+            Districts: ${districtCount}<br>
+            ViewBox: ${data.viewBox}
+          </div>
+        `;
+
+        // Render the map
+        const districtNames = Object.keys(data.districts);
+        const paths = districtNames.map(name => 
+          `<path d="${data.districts[name]}" data-district="${name}">
+            <title>${name}</title>
+          </path>`
+        ).join('\n');
+
+        mapContainer.innerHTML = `
+          <svg viewBox="${data.viewBox}" preserveAspectRatio="xMidYMid meet">
+            ${paths}
+          </svg>
+          <div class="district-name">
+            Districts: ${districtNames.join(', ')}
+          </div>
+        `;
+
+        // Show data structure
+        dataInfo.innerHTML = `
+          <h3 style="color: #8B5CF6; margin-top: 2rem;">Data Structure:</h3>
+          <pre>${JSON.stringify(data, null, 2)}</pre>
+        `;
+
+      } catch (error) {
+        statusEl.className = 'status error';
+        statusEl.innerHTML = `
+          <strong>❌ Error loading map</strong><br>
+          <div class="district-name">${error.message}</div>
+        `;
+        console.error('Map load error:', error);
+      }
+    }
+
+    // Run test on page load
+    testMap();
+  </script>
+</body>
+</html>

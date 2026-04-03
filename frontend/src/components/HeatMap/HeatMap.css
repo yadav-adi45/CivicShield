@@ -146,8 +146,50 @@
   justify-content: center;
   align-items: center;
   min-height: 300px;
-  color: var(--text-muted);
+  padding: var(--space-xl);
+  text-align: center;
+}
+
+.state-map-error {
+  color: var(--text-secondary);
+}
+
+.state-map-error .error-icon {
+  font-size: 3rem;
+  margin-bottom: var(--space-md);
+  opacity: 0.5;
+}
+
+.state-map-error .error-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.state-map-error .error-message {
   font-size: 0.85rem;
+  color: var(--risk-high);
+  margin-bottom: var(--space-md);
+  max-width: 400px;
+  line-height: 1.5;
+}
+
+.state-map-error .error-details {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  padding: var(--space-sm) var(--space-md);
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border);
+}
+
+.state-map-error .error-details div {
+  margin: 4px 0;
+}
+
+[data-theme="light"] .state-map-error .error-details {
+  background: rgba(0, 0, 0, 0.03);
 }
 
 /* ── District Search ──────────────────────────────────── */
