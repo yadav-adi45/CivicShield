@@ -1,4 +1,5 @@
 import React from 'react';
+import SOSButton from '../SOSButton/SOSButton';
 import './Header.css';
 
 export default function Header({ stats, onRefresh, lastUpdated, isSimulating, onToggleSimulation, theme, onToggleTheme, onToggleNews, showNewsPanel }) {
@@ -33,13 +34,7 @@ export default function Header({ stats, onRefresh, lastUpdated, isSimulating, on
           {isSimulating ? 'SIMULATION' : 'LIVE'}
         </div>
 
-        <button 
-          className={`header-simulate ${isSimulating ? 'active' : ''}`}
-          onClick={onToggleSimulation}
-          title={isSimulating ? 'Exit simulation mode' : 'Simulate crisis scenario'}
-        >
-          {isSimulating ? '✕ Exit Simulation' : '⚡ Simulate Crisis'}
-        </button>
+        <SOSButton />
 
         <button 
           className="header-theme-toggle"
