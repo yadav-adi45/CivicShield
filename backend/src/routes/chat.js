@@ -4,8 +4,8 @@ import axios from 'axios';
 const router = Router();
 
 // Support both Groq and Google Gemini APIs
-const GROQ_API_KEY = process.env.GROQ_API_KEY || 'YOUR_GROQ_API_KEY';
-const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY || 'YOUR_GOOGLE_API_KEY';
+const GROQ_API_KEY = process.env.GROQ_API_KEY;
+const GOOGLE_API_KEY = process.env.GOOGLE_API_KEY;
 const USE_GOOGLE = process.env.USE_GOOGLE_API === 'true' || false; // Default to Groq (more reliable)
 
 const GROQ_API_URL = 'https://api.groq.com/openai/v1/chat/completions';
