@@ -37,6 +37,10 @@ export default function Dashboard() {
   const [chatLoading, setChatLoading] = useState(false);
   const [isListening, setIsListening] = useState(false);
   const [speechSupported, setSpeechSupported] = useState(false);
+  const [speechSynthesisSupported, setSpeechSynthesisSupported] = useState(false);
+  const [autoSpeak, setAutoSpeak] = useState(true); // Auto-read bot answers when available
+  const [isSpeaking, setIsSpeaking] = useState(false);
+  const [speechPaused, setSpeechPaused] = useState(false);
   const chatMessagesEndRef = React.useRef(null);
 
   // Auto-scroll to latest message
@@ -193,13 +197,108 @@ export default function Dashboard() {
     setShowChatbot(prev => !prev);
   }, []);
 
-  // Check speech recognition support on mount
+  // Check speech recognition + text-to-speech support on mount
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
     setSpeechSupported(!!SpeechRecognition);
+
+    const synth = window.speechSynthesis;
+    setSpeechSynthesisSupported(!!synth && typeof SpeechSynthesisUtterance !== 'undefined');
+
+    // Ensure voices are loaded (sometimes they load asynchronously)
+    const loadVoices = () => {
+      const voices = synth.getVoices();
+      if (voices.length > 0) {
+        setSpeechSynthesisSupported(true);
+      }
+    };
+
+    loadVoices();
+    if (synth.onvoiceschanged !== undefined) {
+      synth.onvoiceschanged = loadVoices;
+    }
   }, []);
 
   // Speech-to-text handler
+  const speakText = useCallback((text) => {
+    if (!speechSynthesisSupported || !text) return;
+
+    // Stop any current speech
+    if (window.speechSynthesis.speaking) {
+      window.speechSynthesis.cancel();
+    }
+
+    const cleanText = text.replace(/\n+/g, '. ').trim();
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+
+    // Enhanced voice quality settings
+    utterance.lang = 'en-IN';
+    utterance.rate = 0.9; // Slightly slower for clarity
+    utterance.pitch = 1.1; // Slightly higher pitch for better clarity
+    utterance.volume = 0.8; // Comfortable volume
+
+    // Select best available voice (prefer female, clear voices)
+    const voices = window.speechSynthesis.getVoices();
+    const preferredVoices = voices.filter(voice =>
+      voice.lang.startsWith('en') &&
+      (voice.name.toLowerCase().includes('female') ||
+       voice.name.toLowerCase().includes('karen') ||
+       voice.name.toLowerCase().includes('samantha') ||
+       voice.name.toLowerCase().includes('zira') ||
+       voice.name.toLowerCase().includes('susan'))
+    );
+
+    if (preferredVoices.length > 0) {
+      utterance.voice = preferredVoices[0];
+    } else {
+      // Fallback to any English voice
+      const englishVoice = voices.find(voice => voice.lang.startsWith('en'));
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+    }
+
+    // Track speaking state
+    utterance.onstart = () => {
+      setIsSpeaking(true);
+      setSpeechPaused(false);
+    };
+
+    utterance.onend = () => {
+      setIsSpeaking(false);
+      setSpeechPaused(false);
+    };
+
+    utterance.onerror = () => {
+      setIsSpeaking(false);
+      setSpeechPaused(false);
+    };
+
+    window.speechSynthesis.speak(utterance);
+  }, [speechSynthesisSupported]);
+
+  const toggleSpeechPause = useCallback(() => {
+    if (!speechSynthesisSupported) return;
+
+    if (window.speechSynthesis.speaking) {
+      if (window.speechSynthesis.paused) {
+        window.speechSynthesis.resume();
+        setSpeechPaused(false);
+      } else {
+        window.speechSynthesis.pause();
+        setSpeechPaused(true);
+      }
+    }
+  }, [speechSynthesisSupported]);
+
+  const stopSpeech = useCallback(() => {
+    if (!speechSynthesisSupported) return;
+
+    window.speechSynthesis.cancel();
+    setIsSpeaking(false);
+    setSpeechPaused(false);
+  }, [speechSynthesisSupported]);
+
   const handleVoiceInput = useCallback(() => {
     if (!speechSupported) return;
 
@@ -256,6 +355,9 @@ export default function Dashboard() {
           content: offlineReply + '\n\n⚠️ Offline mode active. Reconnect for AI-powered guidance.'
         };
         setChatMessages(prev => [...prev, botMessage]);
+        if (autoSpeak) {
+          speakText(botMessage.content);
+        }
         setChatLoading(false);
       }, 500);
       
@@ -306,6 +408,9 @@ export default function Dashboard() {
           content: data.reply
         };
         setChatMessages(prev => [...prev, botMessage]);
+        if (autoSpeak) {
+          speakText(botMessage.content);
+        }
         console.log('[Frontend] ✅ Bot reply received:', data.reply.substring(0, 50) + '...');
       } else {
         // Use fallback message from backend if available
@@ -316,6 +421,9 @@ export default function Dashboard() {
           content: fallbackContent
         };
         setChatMessages(prev => [...prev, botMessage]);
+        if (autoSpeak) {
+          speakText(botMessage.content);
+        }
       }
     } catch (error) {
       console.error('[Frontend] ❌ Chatbot error:', error);
@@ -324,10 +432,13 @@ export default function Dashboard() {
         content: 'Sorry, I\'m having trouble connecting right now. Please check that all services are running and try again.'
       };
       setChatMessages(prev => [...prev, errorMessage]);
+      if (autoSpeak) {
+        speakText(errorMessage.content);
+      }
     } finally {
       setChatLoading(false);
     }
-  }, [chatMessages, chatLoading, selectedState, regionDetail, isOnline]);
+  }, [chatMessages, chatLoading, selectedState, regionDetail, isOnline, autoSpeak, speakText]);
 
   const handleSuggestedQuestion = useCallback((question) => {
     handleSendMessage(question);
@@ -1042,7 +1153,45 @@ For emergency assistance, contact local authorities or dial 112
                     }
                   </span>
                 </div>
-                <button className="chatbot-close" onClick={toggleChatbot}>✕</button>
+                <div className="chatbot-controls">
+                  <button
+                    className={`icon-btn tts-toggle ${speechSynthesisSupported ? '' : 'disabled'}`}
+                    onClick={() => setAutoSpeak(prev => !prev)}
+                    disabled={!speechSynthesisSupported}
+                    title={speechSynthesisSupported ? `Auto-read is ${autoSpeak ? 'On' : 'Off'}` : 'Text-to-speech unavailable'}
+                  >
+                    {autoSpeak ? '🔊' : '🔈'}
+                  </button>
+                  <button
+                    className={`icon-btn tts-pause ${isSpeaking ? '' : 'disabled'} ${speechPaused ? 'paused' : ''}`}
+                    onClick={toggleSpeechPause}
+                    disabled={!isSpeaking}
+                    title={speechPaused ? 'Resume speech' : 'Pause speech'}
+                  >
+                    {speechPaused ? '▶️' : '⏸️'}
+                  </button>
+                  <button
+                    className={`icon-btn tts-stop ${isSpeaking ? '' : 'disabled'}`}
+                    onClick={stopSpeech}
+                    disabled={!isSpeaking}
+                    title="Stop speech"
+                  >
+                    ⏹️
+                  </button>
+                  <button
+                    className={`icon-btn tts-read ${speechSynthesisSupported ? '' : 'disabled'}`}
+                    onClick={() => {
+                      if (!speechSynthesisSupported) return;
+                      const latestBot = [...chatMessages].reverse().find(msg => msg.role === 'assistant');
+                      if (latestBot) speakText(latestBot.content);
+                    }}
+                    disabled={!speechSynthesisSupported || chatMessages.length === 0}
+                    title={speechSynthesisSupported ? 'Read latest assistant answer' : 'Text-to-speech unavailable'}
+                  >
+                    ▶️
+                  </button>
+                  <button className="chatbot-close" onClick={toggleChatbot}>✕</button>
+                </div>
               </div>
 
               <div className="chatbot-messages">

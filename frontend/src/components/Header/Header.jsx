@@ -14,6 +14,8 @@ export default function Header({ stats, onRefresh, lastUpdated, isSimulating, on
       </div>
 
       <div className="header-right">
+        <SOSButton />
+
         <div className="header-stats">
           <div className="header-stat">
             <span className="header-stat-value high">{stats?.high ?? '–'}</span>
@@ -33,8 +35,6 @@ export default function Header({ stats, onRefresh, lastUpdated, isSimulating, on
           <div className="live-dot"></div>
           {isSimulating ? 'SIMULATION' : 'LIVE'}
         </div>
-
-        <SOSButton />
 
         <button 
           className="header-theme-toggle"
